@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VetPalata — Презентация проекта</title>
+<style>
+  :root {
+    --primary: #003580;
+    --accent: #00A86B;
+    --danger: #e53935;
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: rgba(255,255,255,0.08);
+    --text: #f0f4ff;
+    --muted: #8b9ab8;
+    --card: rgba(255,255,255,0.04);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* SLIDES CONTAINER */
+  .deck { width:100%; height:100%; position:relative; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity .45s cubic-bezier(.4,0,.2,1), transform .45s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+  }
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* BACKGROUNDS */
+  .slide-1 { background: radial-gradient(ellipse at 30% 50%, #0d2a6b 0%, var(--bg) 65%); }
+  .slide-2 { background: radial-gradient(ellipse at 70% 40%, #0d3b28 0%, var(--bg) 65%); }
+  .slide-3 { background: radial-gradient(ellipse at 20% 60%, #1a1040 0%, var(--bg) 65%); }
+  .slide-4 { background: radial-gradient(ellipse at 80% 30%, #0d2a6b 0%, var(--bg) 65%); }
+  .slide-5 { background: radial-gradient(ellipse at 40% 70%, #1a2a0d 0%, var(--bg) 65%); }
+  .slide-6 { background: radial-gradient(ellipse at 60% 50%, #2a0d1a 0%, var(--bg) 65%); }
+  .slide-7 { background: radial-gradient(ellipse at 30% 40%, #0d1a2a 0%, var(--bg) 65%); }
+  .slide-8 { background: radial-gradient(ellipse at 70% 60%, #0d3b28 0%, var(--bg) 65%); }
+  .slide-9 { background: radial-gradient(ellipse at 50% 50%, #1a1040 0%, var(--bg) 65%); }
+  .slide-10 { background: radial-gradient(ellipse at 30% 50%, #2a1a0d 0%, var(--bg) 65%); }
+  .slide-11 { background: radial-gradient(ellipse at 60% 30%, #0d2a6b 0%, var(--bg) 65%); }
+  .slide-12 { background: radial-gradient(ellipse at 50% 60%, #0d3b28 0%, var(--bg) 65%); }
+
+  /* DECORATIVE GRID */
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* TYPOGRAPHY */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+    border: 1px solid rgba(0,168,107,0.3);
+    padding: 4px 14px;
+    border-radius: 20px;
+  }
+  .tag.blue { color: #60a5fa; border-color: rgba(96,165,250,0.3); }
+  .tag.orange { color: #fb923c; border-color: rgba(251,146,60,0.3); }
+  .tag.purple { color: #c084fc; border-color: rgba(192,132,252,0.3); }
+
+  h1 {
+    font-size: clamp(36px, 5vw, 68px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    text-align: center;
+  }
+  h2 {
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -1px;
+  }
+  h3 { font-size: clamp(18px, 2vw, 26px); font-weight: 600; }
+  p { font-size: clamp(14px, 1.5vw, 18px); color: var(--muted); line-height: 1.7; }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .accent-text { color: var(--accent); }
+
+  /* LOGO */
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .logo-wrap img { height: 52px; border-radius: 10px; }
+  .logo-name { font-size: 22px; font-weight: 700; }
+
+  /* HERO SUBTITLE */
+  .hero-sub {
+    font-size: clamp(16px, 1.8vw, 22px);
+    color: var(--muted);
+    text-align: center;
+    max-width: 700px;
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+  .hero-badges {
+    display: flex;
+    gap: 12px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .badge {
+    padding: 8px 20px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid;
+  }
+  .badge-green { color: var(--accent); border-color: rgba(0,168,107,.35); background: rgba(0,168,107,.08); }
+  .badge-blue  { color: #60a5fa; border-color: rgba(96,165,250,.35); background: rgba(96,165,250,.08); }
+  .badge-purple{ color: #c084fc; border-color: rgba(192,132,252,.35); background: rgba(192,132,252,.08); }
+
+  /* GRID LAYOUTS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; margin-top: 36px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; width: 100%; margin-top: 36px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; width: 100%; margin-top: 36px; }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+  }
+  .card-icon { font-size: 28px; margin-bottom: 12px; }
+  .card h3 { font-size: 16px; margin-bottom: 8px; font-weight: 600; }
+  .card p { font-size: 13px; color: var(--muted); }
+
+  .card.accent-card {
+    border-color: rgba(0,168,107,.3);
+    background: rgba(0,168,107,.06);
+  }
+  .card.blue-card {
+    border-color: rgba(96,165,250,.3);
+    background: rgba(96,165,250,.06);
+  }
+  .card.purple-card {
+    border-color: rgba(192,132,252,.3);
+    background: rgba(192,132,252,.06);
+  }
+  .card.orange-card {
+    border-color: rgba(251,146,60,.3);
+    background: rgba(251,146,60,.06);
+  }
+
+  /* STATUS BADGES */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+  .status-done { background: rgba(0,168,107,.15); color: var(--accent); }
+  .status-done::before { background: var(--accent); }
+  .status-wip  { background: rgba(251,191,36,.15); color: #fbbf24; }
+  .status-wip::before  { background: #fbbf24; animation: pulse 1.2s infinite; }
+  .status-todo { background: rgba(239,68,68,.15); color: #f87171; }
+  .status-todo::before { background: #f87171; }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; } 50% { opacity:0.3; }
+  }
+
+  /* FEATURE LIST */
+  .feat-list { list-style: none; margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .feat-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .feat-list li .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    flex-shrink: 0; margin-top: 6px;
+  }
+  .feat-list li .dot.blue { background: #60a5fa; }
+  .feat-list li .dot.purple { background: #c084fc; }
+
+  /* TECH PILLS */
+  .tech-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+    margin: 3px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin-top: 10px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .progress-bar { height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .fill-green { background: linear-gradient(90deg, var(--accent), #34d399); }
+  .fill-blue  { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+  .fill-yellow{ background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+  .fill-red   { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+  /* COMPARISON TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 14px; }
+  .compare-table th {
+    padding: 14px 18px;
+    text-align: left;
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .compare-table tr:hover td { background: rgba(255,255,255,.02); }
+  .check { color: var(--accent); font-size: 16px; }
+  .cross { color: #f87171; font-size: 16px; }
+
+  /* PAYMENT CARD */
+  .pay-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    flex: 1;
+  }
+  .pay-icon {
+    width: 56px; height: 56px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 18px;
+  }
+  .pay-icon.green { background: rgba(0,168,107,.15); }
+  .pay-icon.blue  { background: rgba(96,165,250,.15); }
+  .pay-card h3 { font-size: 20px; margin-bottom: 10px; }
+  .pay-card p  { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .pay-flow {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pay-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .step-num.green { background: rgba(0,168,107,.25); color: var(--accent); }
+  .step-num.blue  { background: rgba(96,165,250,.25); color: #60a5fa; }
+
+  /* PHASE TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 0; width: 100%; margin-top: 28px; }
+  .phase {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 28px;
+    position: relative;
+  }
+  .phase:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 44px;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .phase-dot {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0; border: 2px solid;
+    background: var(--bg);
+  }
+  .phase-dot.green  { border-color: var(--accent); color: var(--accent); }
+  .phase-dot.blue   { border-color: #60a5fa; color: #60a5fa; }
+  .phase-dot.purple { border-color: #c084fc; color: #c084fc; }
+  .phase-dot.orange { border-color: #fb923c; color: #fb923c; }
+  .phase-content { flex: 1; padding-top: 6px; }
+  .phase-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .phase-meta  { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .phase-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* BIG NUMBER */
+  .big-stat {
+    text-align: center;
+    padding: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+  .big-stat .num {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+  .big-stat .lbl { font-size: 12px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* MOBILE APP MOCKUP */
+  .phone {
+    width: 160px;
+    height: 290px;
+    border: 3px solid rgba(255,255,255,.15);
+    border-radius: 28px;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .phone-notch {
+    width: 50px; height: 14px;
+    background: var(--bg);
+    border-radius: 0 0 10px 10px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .phone-screen { padding: 4px 8px; }
+  .phone-bar { height: 5px; border-radius: 3px; margin-bottom: 5px; }
+  .phone-item {
+    display: flex; gap: 6px; align-items: center;
+    padding: 5px 6px;
+    background: rgba(255,255,255,.04);
+    border-radius: 8px;
+    margin-bottom: 5px;
+  }
+  .phone-img { width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0; }
+  .phone-text { flex: 1; }
+  .phone-t1 { height: 5px; border-radius: 3px; margin-bottom: 3px; }
+  .phone-t2 { height: 4px; border-radius: 3px; width: 60%; }
+  .phone-tabs {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    display: flex;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    padding: 6px 4px 10px;
+  }
+  .phone-tab {
+    flex: 1; text-align: center; font-size: 7px; color: var(--muted);
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .phone-tab.active { color: var(--accent); }
+  .phone-tab-icon { font-size: 11px; }
+
+  /* APP FEATURES */
+  .app-feature-row {
+    display: flex;
+    gap: 28px;
+    width: 100%;
+    margin-top: 28px;
+    align-items: flex-start;
+  }
+  .app-feature-list { flex: 1; }
+  .app-section {
+    margin-bottom: 20px;
+  }
+  .app-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .app-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* PRICING TABLE */
+  .pricing-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pricing-item:last-child { border-bottom: none; }
+  .pricing-left { display: flex; align-items: center; gap: 14px; }
+  .pricing-icon { font-size: 20px; width: 40px; text-align: center; }
+  .pricing-name { font-size: 15px; font-weight: 500; }
+  .pricing-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .pricing-right { text-align: right; }
+  .pricing-amount { font-size: 18px; font-weight: 700; }
+  .pricing-time { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .pricing-amount.green { color: var(--accent); }
+  .pricing-amount.blue  { color: #60a5fa; }
+  .pricing-amount.purple{ color: #c084fc; }
+  .pricing-amount.orange{ color: #fb923c; }
+  .pricing-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+    margin-top: 8px;
+    background: rgba(255,255,255,.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.1);
+  }
+  .pricing-total span { font-size: 16px; color: var(--muted); }
+  .pricing-total strong { font-size: 28px; font-weight: 800; }
+
+  /* NAVIGATION */
+  .nav {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    background: rgba(10,14,26,.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 10px 20px;
+  }
+  .nav-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.05);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
+  .nav-counter { font-size: 13px; color: var(--muted); min-width: 52px; text-align: center; }
+  .nav-dots { display: flex; gap: 6px; }
+  .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,.2);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .nav-dot.active { background: var(--accent); width: 20px; border-radius: 3px; }
+
+  /* SLIDE HEADER */
+  .slide-header {
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 12px;
+  }
+
+  /* DIVIDER */
+  .divider { width: 60px; height: 3px; background: var(--accent); border-radius: 2px; margin: 14px 0; }
+  .divider.blue { background: #60a5fa; }
+
+  /* SLIDE 1 - HERO */
+  .hero-glow {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,168,107,.15) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+
+  /* ARCH DIAGRAM */
+  .arch { display: flex; gap: 16px; align-items: stretch; width: 100%; margin-top: 24px; }
+  .arch-layer {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 14px;
+    position: relative;
+  }
+  .arch-layer-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .arch-item {
+    background: rgba(255,255,255,.05);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 6px;
+    border: 1px solid rgba(255,255,255,.06);
+  }
+  .arch-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--muted);
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  /* SCOPE SECTION */
+  .scope-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .scope-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .scope-body { padding: 16px 20px; }
+
+  /* WRAP CONTENT */
+  .content-wrap {
+    width: 100%;
+    max-width: 1100px;
+    z-index: 1;
+    position: relative;
+  }
+  .full-center { text-align: center; display: flex; flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ─── SLIDE 1: TITLE ─── -->
+  <div class="slide slide-1 active full-center">
+    <div class="hero-glow"></div>
+    <div class="content-wrap" style="display:flex;flex-direction:column;align-items:center">
+      <div class="logo-wrap">
+        <img src="logo.png" alt="VetPalata" onerror="this.style.display='none'">
+        <span class="logo-name" style="font-size:28px;font-weight:800;letter-spacing:-0.5px">VetPalata</span>
+      </div>
+      <div class="tag">Коммерческое предложение</div>
+      <h1>Ветеринарная<br><span class="gradient-text">цифровая платформа</span></h1>
+      <p class="hero-sub">
+        Полноценная экосистема: B2B-сайт для продажи ветеринарных товаров
+        и мобильное приложение с встроенным маркетплейсом
+      </p>
+      <div class="hero-badges">
+        <span class="badge badge-green">✓ Сайт готов на 85%</span>
+        <span class="badge badge-blue">📱 Мобильное приложение</span>
+        <span class="badge badge-purple">🛒 Маркетплейс</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 2: ЧТО ЭТО ─── -->
+  <div class="slide slide-2">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag">О проекте</div>
+        <h2>Аналог <span class="accent-text">vsb.kg</span> — ведущего<br>ветеринарного B2B-портала</h2>
+        <div class="divider"></div>
+        <p>Полный аналог платформы vsb.kg с расширенным функционалом, адаптированный под требования заказчика — АО «Валта Пет Продактс»</p>
+      </div>
+      <div class="grid-3">
+        <div class="card accent-card">
+          <div class="card-icon">🏪</div>
+          <h3>Интернет-магазин</h3>
+          <p>Каталог товаров, корзина, оформление заказов, история покупок, промокоды, лояльность</p>
+        </div>
+        <div class="card blue-card">
+          <div class="card-icon">👥</div>
+          <h3>B2B-функционал</h3>
+          <p>Регистрация юрлиц, управление документами, менеджерский кабинет, согласование заявок</p>
+        </div>
+        <div class="card purple-card">
+          <div class="card-icon">📰</div>
+          <h3>CMS & Контент</h3>
+          <p>Новости, баннеры, FAQ, галерея, квизы, мультиязычность (RU / KZ / EN)</p>
+        </div>
+      </div>
+      <div class="grid-4" style="margin-top:16px">
+        <div class="big-stat">
+          <div class="num gradient-text">57+</div>
+          <div class="lbl">сущностей БД</div>
+        </div>
+        <div class="big-stat">
+          <div class="num gradient-text">30+</div>
+          <div class="lbl">API-контроллеров</div>
+        </div>
+        <div class="big-stat">
+          <div class="num gradient-text">38+</div>
+          <div class="lbl">бизнес-сервисов</div>
+        </div>
+        <div class="big-stat">
+          <div class="num gradient-text">3</div>
+          <div class="lbl">языка интерфейса</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 3: СРАВНЕНИЕ С VSB.KG ─── -->
+  <div class="slide slide-3">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag blue">Конкурентный анализ</div>
+        <h2>VetPalata vs <span style="color:#60a5fa">vsb.kg</span></h2>
+        <div class="divider blue"></div>
+      </div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:35%">Функционал</th>
+            <th style="text-align:center">vsb.kg</th>
+            <th style="text-align:center">VetPalata</th>
+            <th>Примечание</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Каталог товаров с поиском и фильтрами</td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:var(--muted);font-size:13px">Полностью реализовано</td>
+          </tr>
+          <tr>
+            <td>Корзина и оформление заказов</td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:var(--muted);font-size:13px">Включая анонимную корзину</td>
+          </tr>
+          <tr>
+            <td>Личный кабинет / история заказов</td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:var(--muted);font-size:13px">Реализовано</td>
+          </tr>
+          <tr>
+            <td>Регистрация юридических лиц</td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:var(--muted);font-size:13px">B2B-модуль с документами</td>
+          </tr>
+          <tr>
+            <td>Система скидок и промокодов</td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:#60a5fa;font-size:13px">Наше преимущество</td>
+          </tr>
+          <tr>
+            <td>Программа лояльности (тиры)</td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:#60a5fa;font-size:13px">Наше преимущество</td>
+          </tr>
+          <tr>
+            <td>Мобильное приложение</td>
+            <td style="text-align:center"><span class="cross">✗</span></td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:#60a5fa;font-size:13px">Ключевое отличие</td>
+          </tr>
+          <tr>
+            <td>Встроенный маркетплейс</td>
+            <td style="text-align:center"><span class="cross">✗</span></td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:#60a5fa;font-size:13px">Уникальный функционал</td>
+          </tr>
+          <tr>
+            <td>Telegram-интеграция</td>
+            <td style="text-align:center"><span class="cross">✗</span></td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:#60a5fa;font-size:13px">Уведомления и бот</td>
+          </tr>
+          <tr>
+            <td>Мультиязычность (RU/KZ/EN)</td>
+            <td style="text-align:center">частично</td>
+            <td style="text-align:center"><span class="check">✓</span></td>
+            <td style="color:#60a5fa;font-size:13px">Полная i18n поддержка</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 4: СТАТУС ГОТОВНОСТИ ─── -->
+  <div class="slide slide-4">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag">Текущий статус</div>
+        <h2>Что <span class="accent-text">готово</span> и что осталось</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="grid-2">
+        <div class="scope-block">
+          <div class="scope-header">
+            <span style="font-weight:600;font-size:15px">🌐 Веб-сайт (Frontend + Backend)</span>
+            <span class="status status-wip">В работе</span>
+          </div>
+          <div class="scope-body">
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Общая готовность</span><span style="color:var(--accent)">85%</span></div>
+              <div class="progress-bar"><div class="progress-fill fill-green" style="width:85%"></div></div>
+            </div>
+            <ul class="feat-list" style="margin-top:14px">
+              <li><div class="dot"></div><span><b style="color:var(--text)">✓ Готово:</b> Авторизация, JWT, Google OAuth</span></li>
+              <li><div class="dot"></div><span><b style="color:var(--text)">✓ Готово:</b> Каталог, поиск, фильтры, отзывы</span></li>
+              <li><div class="dot"></div><span><b style="color:var(--text)">✓ Готово:</b> Корзина, заказы, доставка</span></li>
+              <li><div class="dot"></div><span><b style="color:var(--text)">✓ Готово:</b> Скидки, промокоды, лояльность</span></li>
+              <li><div class="dot"></div><span><b style="color:var(--text)">✓ Готово:</b> CMS: новости, FAQ, баннеры</span></li>
+              <li><div class="dot"></div><span><b style="color:var(--text)">✓ Готово:</b> Админ-панель, управление заказами</span></li>
+              <li><div class="dot" style="background:#fbbf24"></div><span><b style="color:#fbbf24">⏳ В доработке:</b> Платёжная система</span></li>
+              <li><div class="dot" style="background:#fbbf24"></div><span><b style="color:#fbbf24">⏳ Осталось:</b> Вывод в продакшн</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="scope-block">
+          <div class="scope-header">
+            <span style="font-weight:600;font-size:15px">📱 Мобильное приложение</span>
+            <span class="status status-todo">Планирование</span>
+          </div>
+          <div class="scope-body">
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Общая готовность</span><span style="color:#60a5fa">0%</span></div>
+              <div class="progress-bar"><div class="progress-fill fill-blue" style="width:0%"></div></div>
+            </div>
+            <ul class="feat-list" style="margin-top:14px">
+              <li><div class="dot blue"></div><span>Весь функционал сайта в нативном приложении</span></li>
+              <li><div class="dot blue"></div><span>Push-уведомления о заказах и акциях</span></li>
+              <li><div class="dot blue"></div><span>Офлайн-режим и кэширование</span></li>
+              <li><div class="dot blue"></div><span>Биометрическая авторизация</span></li>
+              <li><div class="dot blue"></div><span>Новая вкладка: маркетплейс «Вет Товары»</span></li>
+              <li><div class="dot blue"></div><span>Отдельные товары и категории маркетплейса</span></li>
+              <li><div class="dot blue"></div><span>Собственный функционал маркетплейса</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 5: АРХИТЕКТУРА ─── -->
+  <div class="slide slide-5">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag">Технический стек</div>
+        <h2>Архитектура <span class="accent-text">системы</span></h2>
+        <div class="divider"></div>
+      </div>
+      <div class="arch">
+        <div class="arch-layer" style="border-color:rgba(96,165,250,.3)">
+          <div class="arch-layer-title" style="color:#60a5fa">📱 Mobile App</div>
+          <div class="arch-item">Flutter (Dart)</div>
+          <div class="arch-item">Bloc / Provider</div>
+          <div class="arch-item">Dio HTTP Client</div>
+          <div class="arch-item">Firebase Push</div>
+          <div class="arch-item" style="border-color:rgba(192,132,252,.3);color:#c084fc">+ Маркетплейс</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-layer" style="border-color:rgba(0,168,107,.3)">
+          <div class="arch-layer-title" style="color:var(--accent)">🌐 Frontend Web</div>
+          <div class="arch-item">React 18</div>
+          <div class="arch-item">Redux Toolkit</div>
+          <div class="arch-item">Material-UI v6</div>
+          <div class="arch-item">RTK Query</div>
+          <div class="arch-item">React Router v7</div>
+        </div>
+        <div class="arch-arrow">↕ REST</div>
+        <div class="arch-layer" style="border-color:rgba(251,146,60,.3)">
+          <div class="arch-layer-title" style="color:#fb923c">⚙️ Backend API</div>
+          <div class="arch-item">Spring Boot 3.4</div>
+          <div class="arch-item">Spring Security</div>
+          <div class="arch-item">Spring Data JPA</div>
+          <div class="arch-item">JWT + OAuth2</div>
+          <div class="arch-item">MapStruct</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="border-color:rgba(239,68,68,.3)">
+          <div class="arch-layer-title" style="color:#f87171">🗄️ Инфраструктура</div>
+          <div class="arch-item">PostgreSQL 15</div>
+          <div class="arch-item">Cloudinary (CDN)</div>
+          <div class="arch-item">Gmail SMTP</div>
+          <div class="arch-item">Twilio SMS</div>
+          <div class="arch-item">Telegram Bot</div>
+        </div>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">
+        <span class="tech-pill">Java 21</span>
+        <span class="tech-pill">Spring Boot</span>
+        <span class="tech-pill">React 18</span>
+        <span class="tech-pill">TypeScript</span>
+        <span class="tech-pill">Flutter</span>
+        <span class="tech-pill">PostgreSQL</span>
+        <span class="tech-pill">Redis (план)</span>
+        <span class="tech-pill">Docker</span>
+        <span class="tech-pill">Railway</span>
+        <span class="tech-pill">Vercel</span>
+        <span class="tech-pill">Firebase</span>
+        <span class="tech-pill">Cloudinary</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 6: ПЛАТЁЖНАЯ СИСТЕМА ─── -->
+  <div class="slide slide-6">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag orange">Платёжная система</div>
+        <h2>Простое и надёжное<br><span style="color:#fb923c">решение для оплаты</span></h2>
+        <div class="divider" style="background:#fb923c"></div>
+        <p>Без интеграции эквайринга на первом этапе — минимум рисков, максимум надёжности</p>
+      </div>
+      <div class="grid-2" style="margin-top:28px;gap:28px">
+        <div class="pay-card" style="border-color:rgba(0,168,107,.3)">
+          <div class="pay-icon green">🏦</div>
+          <h3 style="color:var(--accent)">Безналичная оплата</h3>
+          <p>Перечисление денежных средств на расчётный счёт компании<br><b style="color:var(--text)">АО «Валта Пет Продактс»</b></p>
+          <div class="pay-flow">
+            <div class="pay-step">
+              <div class="step-num green">1</div>
+              Клиент оформляет заказ на сайте / в приложении
+            </div>
+            <div class="pay-step">
+              <div class="step-num green">2</div>
+              Система генерирует счёт на оплату (PDF)
+            </div>
+            <div class="pay-step">
+              <div class="step-num green">3</div>
+              Клиент переводит сумму по реквизитам
+            </div>
+            <div class="pay-step">
+              <div class="step-num green">4</div>
+              Менеджер подтверждает поступление и меняет статус заказа
+            </div>
+          </div>
+        </div>
+        <div class="pay-card" style="border-color:rgba(96,165,250,.3)">
+          <div class="pay-icon blue">🚚</div>
+          <h3 style="color:#60a5fa">Наличная оплата</h3>
+          <p>Оплата по чеку наличными деньгами <b style="color:var(--text)">водителю или экспедитору</b> в момент поставки товара</p>
+          <div class="pay-flow">
+            <div class="pay-step">
+              <div class="step-num blue">1</div>
+              Клиент выбирает «Оплата при доставке»
+            </div>
+            <div class="pay-step">
+              <div class="step-num blue">2</div>
+              Заказ подтверждается и уходит на сборку
+            </div>
+            <div class="pay-step">
+              <div class="step-num blue">3</div>
+              Курьер / экспедитор привозит товар с чеком
+            </div>
+            <div class="pay-step">
+              <div class="step-num blue">4</div>
+              Клиент платит наличными, получает чек
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 7: МОБИЛЬНОЕ ПРИЛОЖЕНИЕ ─── -->
+  <div class="slide slide-7">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag blue">Мобильное приложение</div>
+        <h2>Весь сайт <span style="color:#60a5fa">в кармане</span><br>+ новый маркетплейс</h2>
+        <div class="divider blue"></div>
+      </div>
+      <div class="app-feature-row">
+        <!-- Phone mockup -->
+        <div style="display:flex;flex-direction:column;gap:16px;flex-shrink:0">
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="phone-screen" style="padding:6px 8px">
+              <div class="phone-bar" style="background:linear-gradient(90deg,#003580,#0052cc);height:28px;border-radius:6px;margin-bottom:8px;display:flex;align-items:center;padding:0 8px">
+                <span style="font-size:8px;font-weight:700;color:white">VetPalata</span>
+              </div>
+              <div style="font-size:7px;color:var(--muted);margin-bottom:6px;font-weight:600">ПОПУЛЯРНЫЕ ТОВАРЫ</div>
+              <div class="phone-item">
+                <div class="phone-img" style="background:linear-gradient(135deg,#1a3a5c,#0d2040)"></div>
+                <div class="phone-text">
+                  <div class="phone-t1" style="background:rgba(255,255,255,.3)"></div>
+                  <div class="phone-t2" style="background:rgba(0,168,107,.5)"></div>
+                </div>
+              </div>
+              <div class="phone-item">
+                <div class="phone-img" style="background:linear-gradient(135deg,#1a3a2c,#0d2018)"></div>
+                <div class="phone-text">
+                  <div class="phone-t1" style="background:rgba(255,255,255,.3)"></div>
+                  <div class="phone-t2" style="background:rgba(0,168,107,.5)"></div>
+                </div>
+              </div>
+              <div class="phone-item">
+                <div class="phone-img" style="background:linear-gradient(135deg,#3a1a2c,#200d18)"></div>
+                <div class="phone-text">
+                  <div class="phone-t1" style="background:rgba(255,255,255,.3)"></div>
+                  <div class="phone-t2" style="background:rgba(0,168,107,.5)"></div>
+                </div>
+              </div>
+            </div>
+            <div class="phone-tabs">
+              <div class="phone-tab active"><div class="phone-tab-icon">🏠</div>Главная</div>
+              <div class="phone-tab"><div class="phone-tab-icon">🛒</div>Магазин</div>
+              <div class="phone-tab" style="color:#c084fc"><div class="phone-tab-icon">🐾</div>Вет Товары</div>
+              <div class="phone-tab"><div class="phone-tab-icon">👤</div>Кабинет</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-feature-list">
+          <div class="app-section">
+            <div class="app-section-title" style="color:var(--accent)">
+              <span>🌐 Функционал сайта</span>
+            </div>
+            <ul class="feat-list">
+              <li><div class="dot"></div><span>Полный каталог товаров с поиском и фильтрами</span></li>
+              <li><div class="dot"></div><span>Корзина, оформление и отслеживание заказов</span></li>
+              <li><div class="dot"></div><span>Личный кабинет, история, программа лояльности</span></li>
+              <li><div class="dot"></div><span>Новости, акции, уведомления</span></li>
+              <li><div class="dot"></div><span>Оба способа оплаты</span></li>
+            </ul>
+          </div>
+          <div class="app-section">
+            <div class="app-section-title" style="color:#c084fc">
+              <span>🐾 Новое: Маркетплейс «Вет Товары»</span>
+            </div>
+            <ul class="feat-list">
+              <li><div class="dot purple"></div><span>Отдельная вкладка с уникальными товарами</span></li>
+              <li><div class="dot purple"></div><span>Свои категории и классификация</span></li>
+              <li><div class="dot purple"></div><span>Независимая система заказов маркетплейса</span></li>
+              <li><div class="dot purple"></div><span>Собственный функционал и UX-сценарии</span></li>
+            </ul>
+          </div>
+          <div class="app-section">
+            <div class="app-section-title" style="color:#60a5fa">
+              <span>📲 Нативные возможности</span>
+            </div>
+            <ul class="feat-list">
+              <li><div class="dot blue"></div><span>Push-уведомления (Firebase)</span></li>
+              <li><div class="dot blue"></div><span>Биометрическая авторизация</span></li>
+              <li><div class="dot blue"></div><span>iOS & Android из единой кодовой базы (Flutter)</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 8: МАРКЕТПЛЕЙС ─── -->
+  <div class="slide slide-8">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag purple">Маркетплейс «Вет Товары»</div>
+        <h2>Новый <span style="color:#c084fc">бизнес-модуль</span><br>внутри приложения</h2>
+        <div class="divider" style="background:#c084fc"></div>
+        <p>Отдельный, независимый маркетплейс с собственной логикой — дополнение, а не замена основного магазина</p>
+      </div>
+      <div class="grid-2" style="margin-top:28px">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card purple-card">
+            <div class="card-icon">🐾</div>
+            <h3>Ветеринарные товары</h3>
+            <p>Специализированные товары для ветклиник, ветаптек и частных ветврачей — другая аудитория, другие потребности</p>
+          </div>
+          <div class="card purple-card">
+            <div class="card-icon">🏷️</div>
+            <h3>Своя товарная база</h3>
+            <p>Отдельные карточки товаров, категории, атрибуты. Не пересекается с основным магазином</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card" style="border-color:rgba(192,132,252,.2)">
+            <div class="card-icon">⚙️</div>
+            <h3>Технически</h3>
+            <ul class="feat-list" style="margin-top:8px">
+              <li><div class="dot purple"></div><span>Отдельный модуль в бэкенде (Spring Boot)</span></li>
+              <li><div class="dot purple"></div><span>Своя БД-схема, сущности, API</span></li>
+              <li><div class="dot purple"></div><span>Независимая вкладка в Flutter-приложении</span></li>
+              <li><div class="dot purple"></div><span>Единая авторизация с основным сайтом</span></li>
+              <li><div class="dot purple"></div><span>Единый кабинет пользователя</span></li>
+            </ul>
+          </div>
+          <div class="card" style="border-color:rgba(192,132,252,.2)">
+            <div class="card-icon">📈</div>
+            <h3>Бизнес-ценность</h3>
+            <p>Расширение аудитории: охват не только оптовых покупателей, но и ветеринарных специалистов — новый канал продаж</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 9: ОЦЕНКА СЛОЖНОСТИ ─── -->
+  <div class="slide slide-9">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag orange">Оценка сложности</div>
+        <h2>Объём работ<br>по <span style="color:#fb923c">блокам</span></h2>
+        <div class="divider" style="background:#fb923c"></div>
+      </div>
+      <div class="grid-2" style="margin-top:20px;gap:20px">
+        <div>
+          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px">Блок 1 — Доработка сайта</div>
+          <div class="progress-wrap" style="margin-bottom:12px">
+            <div class="progress-label"><span>Платёжная система</span><span style="color:#fbbf24">Средняя</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:45%"></div></div>
+          </div>
+          <div class="progress-wrap" style="margin-bottom:12px">
+            <div class="progress-label"><span>Тестирование + QA</span><span style="color:#fbbf24">Средняя</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:35%"></div></div>
+          </div>
+          <div class="progress-wrap" style="margin-bottom:12px">
+            <div class="progress-label"><span>Деплой в продакшн</span><span style="color:var(--accent)">Низкая</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-green" style="width:20%"></div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Суммарно по блоку</span><span style="color:#fbbf24">≈ 2–3 недели</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:25%"></div></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px">Блок 2 — Мобильное приложение</div>
+          <div class="progress-wrap" style="margin-bottom:12px">
+            <div class="progress-label"><span>Базовый сайт → приложение</span><span style="color:#f87171">Высокая</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-red" style="width:75%"></div></div>
+          </div>
+          <div class="progress-wrap" style="margin-bottom:12px">
+            <div class="progress-label"><span>Маркетплейс «Вет Товары»</span><span style="color:#f87171">Высокая</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-red" style="width:65%"></div></div>
+          </div>
+          <div class="progress-wrap" style="margin-bottom:12px">
+            <div class="progress-label"><span>Push / Биометрия / Офлайн</span><span style="color:#fbbf24">Средняя</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:40%"></div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Суммарно по блоку</span><span style="color:#f87171">≈ 3–4 месяца</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-red" style="width:80%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-4" style="margin-top:20px">
+        <div class="big-stat" style="border-color:rgba(251,146,60,.3)">
+          <div class="num" style="color:#fb923c;font-size:28px">2–3 нед</div>
+          <div class="lbl">Доработка сайта</div>
+        </div>
+        <div class="big-stat" style="border-color:rgba(239,68,68,.3)">
+          <div class="num" style="color:#f87171;font-size:28px">3–4 мес</div>
+          <div class="lbl">Мобильное приложение</div>
+        </div>
+        <div class="big-stat" style="border-color:rgba(192,132,252,.3)">
+          <div class="num" style="color:#c084fc;font-size:28px">+1 мес</div>
+          <div class="lbl">Маркетплейс</div>
+        </div>
+        <div class="big-stat" style="border-color:rgba(0,168,107,.3)">
+          <div class="num" style="color:var(--accent);font-size:28px">5–6 мес</div>
+          <div class="lbl">Полный цикл</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 10: СТОИМОСТЬ ─── -->
+  <div class="slide slide-10">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag orange">Коммерческое предложение</div>
+        <h2>Стоимость<br><span style="color:#fb923c">работ</span></h2>
+        <div class="divider" style="background:#fb923c"></div>
+      </div>
+      <div class="grid-2" style="margin-top:20px;gap:20px">
+        <div class="scope-block">
+          <div class="scope-header">
+            <span style="font-weight:600;font-size:14px">🔧 Блок 1: Доработка сайта</span>
+            <span class="status status-wip">2–3 недели</span>
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-left">
+              <div class="pricing-icon">💳</div>
+              <div>
+                <div class="pricing-name">Платёжная система</div>
+                <div class="pricing-sub">2 способа + генерация счёта</div>
+              </div>
+            </div>
+            <div class="pricing-right">
+              <div class="pricing-amount green">от 150 000 ₸</div>
+              <div class="pricing-time">~1 неделя</div>
+            </div>
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-left">
+              <div class="pricing-icon">🧪</div>
+              <div>
+                <div class="pricing-name">QA-тестирование</div>
+                <div class="pricing-sub">Регрессия + функциональное</div>
+              </div>
+            </div>
+            <div class="pricing-right">
+              <div class="pricing-amount green">от 80 000 ₸</div>
+              <div class="pricing-time">~1 неделя</div>
+            </div>
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-left">
+              <div class="pricing-icon">🚀</div>
+              <div>
+                <div class="pricing-name">Деплой + настройка</div>
+                <div class="pricing-sub">CI/CD, домен, SSL, продакшн</div>
+              </div>
+            </div>
+            <div class="pricing-right">
+              <div class="pricing-amount green">от 50 000 ₸</div>
+              <div class="pricing-time">2–3 дня</div>
+            </div>
+          </div>
+          <div style="padding:16px 20px;border-top:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:13px;color:var(--muted)">Итого Блок 1</span>
+              <strong style="color:var(--accent);font-size:22px">от 280 000 ₸</strong>
+            </div>
+          </div>
+        </div>
+        <div class="scope-block">
+          <div class="scope-header">
+            <span style="font-weight:600;font-size:14px">📱 Блок 2: Мобильное приложение</span>
+            <span class="status status-todo">4–5 месяцев</span>
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-left">
+              <div class="pricing-icon">🏪</div>
+              <div>
+                <div class="pricing-name">Приложение (сайт → Flutter)</div>
+                <div class="pricing-sub">iOS + Android, весь функционал</div>
+              </div>
+            </div>
+            <div class="pricing-right">
+              <div class="pricing-amount blue">от 1 500 000 ₸</div>
+              <div class="pricing-time">3–4 месяца</div>
+            </div>
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-left">
+              <div class="pricing-icon">🐾</div>
+              <div>
+                <div class="pricing-name">Маркетплейс «Вет Товары»</div>
+                <div class="pricing-sub">Отдельный модуль, API, UI</div>
+              </div>
+            </div>
+            <div class="pricing-right">
+              <div class="pricing-amount purple">от 600 000 ₸</div>
+              <div class="pricing-time">+1 месяц</div>
+            </div>
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-left">
+              <div class="pricing-icon">🔔</div>
+              <div>
+                <div class="pricing-name">Push + биометрия + офлайн</div>
+                <div class="pricing-sub">Firebase, биометрия, кэш</div>
+              </div>
+            </div>
+            <div class="pricing-right">
+              <div class="pricing-amount purple">от 200 000 ₸</div>
+              <div class="pricing-time">включено</div>
+            </div>
+          </div>
+          <div style="padding:16px 20px;border-top:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:13px;color:var(--muted)">Итого Блок 2</span>
+              <strong style="color:#60a5fa;font-size:22px">от 2 300 000 ₸</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pricing-total" style="margin-top:16px">
+        <div>
+          <span style="display:block;font-size:13px;margin-bottom:4px">Суммарно (оба блока)</span>
+          <span style="font-size:12px;color:var(--muted)">Цены ориентировочные, уточняются после детального ТЗ</span>
+        </div>
+        <strong style="color:#fb923c">от 2 580 000 ₸</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 11: ДОРОЖНАЯ КАРТА ─── -->
+  <div class="slide slide-11">
+    <div class="content-wrap">
+      <div class="slide-header">
+        <div class="tag">Дорожная карта</div>
+        <h2>Поэтапный <span class="gradient-text">план запуска</span></h2>
+        <div class="divider"></div>
+      </div>
+      <div class="grid-2" style="margin-top:20px;align-items:start">
+        <div class="timeline">
+          <div class="phase">
+            <div class="phase-dot green">✓</div>
+            <div class="phase-content">
+              <div class="phase-title">Фаза 0 — Уже готово <span class="status status-done" style="margin-left:8px">Готово</span></div>
+              <div class="phase-meta">Завершено</div>
+              <div class="phase-desc">Бэкенд (Spring Boot), фронтенд (React), авторизация, каталог, корзина, заказы, CMS, скидки, лояльность, B2B-модуль</div>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="phase-dot orange">1</div>
+            <div class="phase-content">
+              <div class="phase-title">Фаза 1 — Запуск сайта <span class="status status-wip" style="margin-left:8px">В работе</span></div>
+              <div class="phase-meta">2–3 недели</div>
+              <div class="phase-desc">Интеграция платёжной системы (безнал + наличные), финальное QA, деплой в продакшн, настройка домена и SSL</div>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="phase-dot blue">2</div>
+            <div class="phase-content">
+              <div class="phase-title">Фаза 2 — Мобильное приложение <span class="status status-todo" style="margin-left:8px">Планирование</span></div>
+              <div class="phase-meta">3–4 месяца</div>
+              <div class="phase-desc">Flutter-приложение для iOS и Android с полным функционалом сайта, биометрией, Push-уведомлениями</div>
+            </div>
+          </div>
+        </div>
+        <div class="timeline">
+          <div class="phase">
+            <div class="phase-dot purple">3</div>
+            <div class="phase-content">
+              <div class="phase-title">Фаза 3 — Маркетплейс <span class="status status-todo" style="margin-left:8px">Планирование</span></div>
+              <div class="phase-meta">+1 месяц</div>
+              <div class="phase-desc">Разработка модуля «Вет Товары» — независимая вкладка в приложении с отдельными товарами, категориями и заказами</div>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="phase-dot green">4</div>
+            <div class="phase-content">
+              <div class="phase-title">Фаза 4 — Публикация в магазинах</div>
+              <div class="phase-meta">+1–2 недели</div>
+              <div class="phase-desc">Публикация в App Store и Google Play, маркетинг, первые пользователи, мониторинг</div>
+            </div>
+          </div>
+          <div style="padding:20px;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-top:4px">
+            <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Общий срок</div>
+            <div style="font-size:32px;font-weight:800;letter-spacing:-1px;" class="gradient-text">5–6 месяцев</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:6px">от начала работ до полного запуска обеих платформ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SLIDE 12: ИТОГ / CTA ─── -->
+  <div class="slide slide-12 full-center">
+    <div class="hero-glow" style="background:radial-gradient(circle,rgba(0,168,107,.12) 0%,transparent 70%)"></div>
+    <div class="content-wrap" style="display:flex;flex-direction:column;align-items:center;text-align:center">
+      <div class="tag">Следующий шаг</div>
+      <h2 style="font-size:clamp(30px,4vw,52px);margin-bottom:18px">
+        Готовы <span class="gradient-text">стартовать</span>
+      </h2>
+      <p style="max-width:600px;font-size:16px">
+        Сайт готов на 85%. Осталось доработать платёжную систему и вывести в продакшн.
+        Мобильное приложение с маркетплейсом — следующий этап роста.
+      </p>
+      <div class="grid-3" style="margin-top:32px;max-width:900px">
+        <div class="card accent-card" style="text-align:center">
+          <div style="font-size:32px;margin-bottom:10px">🚀</div>
+          <h3>Запуск сайта</h3>
+          <p>2–3 недели до продакшна</p>
+          <div style="margin-top:12px;font-size:20px;font-weight:700;color:var(--accent)">от 280 000 ₸</div>
+        </div>
+        <div class="card blue-card" style="text-align:center">
+          <div style="font-size:32px;margin-bottom:10px">📱</div>
+          <h3>Мобильное приложение</h3>
+          <p>iOS + Android, 3–4 месяца</p>
+          <div style="margin-top:12px;font-size:20px;font-weight:700;color:#60a5fa">от 1 500 000 ₸</div>
+        </div>
+        <div class="card purple-card" style="text-align:center">
+          <div style="font-size:32px;margin-bottom:10px">🐾</div>
+          <h3>Маркетплейс</h3>
+          <p>«Вет Товары» +1 месяц</p>
+          <div style="margin-top:12px;font-size:20px;font-weight:700;color:#c084fc">от 600 000 ₸</div>
+        </div>
+      </div>
+      <div style="margin-top:28px;padding:16px 32px;background:var(--card);border:1px solid var(--border);border-radius:14px;display:flex;gap:32px;align-items:center">
+        <div style="text-align:center">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Стек</div>
+          <div style="font-size:14px;font-weight:600;margin-top:4px">Java + React + Flutter</div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--border)"></div>
+        <div style="text-align:center">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Платформы</div>
+          <div style="font-size:14px;font-weight:600;margin-top:4px">Web + iOS + Android</div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--border)"></div>
+        <div style="text-align:center">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Полный срок</div>
+          <div style="font-size:14px;font-weight:600;margin-top:4px;color:var(--accent)">5–6 месяцев</div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--border)"></div>
+        <div style="text-align:center">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Бюджет</div>
+          <div style="font-size:14px;font-weight:600;margin-top:4px;color:#fb923c">от 2 580 000 ₸</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">←</button>
+  <div class="nav-dots" id="navDots"></div>
+  <span class="nav-counter" id="navCounter">1 / 12</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">→</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const navDots = document.getElementById('navDots');
+  const navCounter = document.getElementById('navCounter');
+  let current = 0;
+  const total = slides.length;
+
+  // Build dots
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    navDots.appendChild(d);
+  }
+
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    slides[current].classList.add('prev');
+    setTimeout(() => slides[current < idx ? current : idx].classList.remove('prev'), 450);
+    current = idx;
+    slides[current].classList.add('active');
+    document.querySelectorAll('.nav-dot').forEach((d,i) => d.classList.toggle('active', i === current));
+    navCounter.textContent = (current + 1) + ' / ' + total;
+    // animate progress bars
+    slides[current].querySelectorAll('.progress-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0';
+      requestAnimationFrame(() => { requestAnimationFrame(() => { el.style.width = w; }); });
+    });
+  }
+
+  function changeSlide(dir) {
+    const next = (current + dir + total) % total;
+    goTo(next);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') changeSlide(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp') changeSlide(-1);
+  });
+
+  // Touch support
+  let touchX = 0;
+  document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+  });
+</script>
+</body>
+</html>
