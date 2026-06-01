@@ -595,6 +595,138 @@
     position: relative;
   }
   .full-center { text-align: center; display: flex; flex-direction: column; align-items: center; }
+
+  /* TABLE WRAP */
+  .table-wrap { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
+
+  /* ═══════════════════════════════════════
+     MOBILE RESPONSIVE
+  ═══════════════════════════════════════ */
+  @media (max-width: 768px) {
+
+    /* Allow scroll inside slides on mobile */
+    .slide {
+      padding: 20px 16px 90px;
+      justify-content: flex-start;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .content-wrap { max-width: 100%; }
+
+    /* Typography */
+    h1 { font-size: 28px !important; letter-spacing: -0.5px; }
+    h2 { font-size: 20px !important; letter-spacing: -0.5px; }
+    h3 { font-size: 14px !important; }
+    p  { font-size: 13px !important; }
+
+    .tag { font-size: 9px; letter-spacing: 1.5px; padding: 3px 10px; margin-bottom: 10px; }
+    .divider { margin: 10px 0; }
+    .slide-header { margin-bottom: 8px; }
+
+    /* Logo on title slide */
+    .logo-wrap { margin-bottom: 20px; }
+    .logo-wrap img { height: 36px; }
+    .logo-name { font-size: 20px !important; }
+    .hero-sub { font-size: 13px !important; margin-top: 12px; }
+    .hero-badges { gap: 8px; margin-top: 20px; }
+    .badge { font-size: 10px; padding: 5px 10px; }
+
+    /* Grids → single column */
+    .grid-2 { grid-template-columns: 1fr !important; gap: 10px; margin-top: 12px; }
+    .grid-3 { grid-template-columns: 1fr !important; gap: 10px; margin-top: 12px; }
+    .grid-4 { grid-template-columns: 1fr 1fr !important; gap: 8px; margin-top: 12px; }
+
+    /* Cards */
+    .card { padding: 14px; }
+    .card-icon { font-size: 20px; margin-bottom: 8px; }
+    .card h3 { font-size: 13px !important; margin-bottom: 4px; }
+    .card p  { font-size: 12px !important; }
+
+    /* Big stats */
+    .big-stat { padding: 12px 8px; }
+    .big-stat .num { font-size: 22px !important; }
+    .big-stat .lbl { font-size: 10px; }
+
+    /* Architecture diagram → vertical */
+    .arch { flex-direction: column; gap: 6px; margin-top: 14px; }
+    .arch-arrow { transform: rotate(90deg); font-size: 14px; align-self: center; height: 20px; }
+    .arch-layer { padding: 12px 10px; }
+    .arch-layer-title { font-size: 9px; margin-bottom: 8px; }
+    .arch-item { font-size: 10px; padding: 5px 8px; margin-bottom: 4px; }
+
+    /* Tech pills */
+    .tech-pill { font-size: 10px; padding: 3px 8px; }
+    div[style*="margin-top:20px"][style*="flex-wrap"] { margin-top: 12px !important; }
+
+    /* Payment cards → vertical column */
+    .pay-grid { flex-direction: column !important; gap: 12px !important; margin-top: 14px !important; }
+    .pay-card { padding: 18px 16px; }
+    .pay-icon { width: 40px; height: 40px; font-size: 20px; margin-bottom: 12px; }
+    .pay-card h3 { font-size: 16px !important; }
+    .pay-card p  { font-size: 12px !important; }
+    .pay-flow { gap: 6px; margin-top: 10px; }
+    .pay-step { font-size: 11px; gap: 8px; }
+    .step-num { width: 18px; height: 18px; font-size: 10px; }
+
+    /* Scope blocks */
+    .scope-header { padding: 12px 14px; flex-wrap: wrap; gap: 6px; }
+    .scope-body { padding: 12px 14px; }
+    .feat-list li { font-size: 12px; }
+
+    /* Progress bars */
+    .progress-label { font-size: 11px; }
+
+    /* App feature row → hide phone, show features only */
+    .app-feature-row { flex-direction: column; gap: 16px; margin-top: 14px; }
+    .app-feature-row > div:first-child { display: none; }
+    .app-section { margin-bottom: 12px; }
+    .app-section-title { font-size: 11px; }
+
+    /* Timeline → single column */
+    .timeline { margin-top: 12px; }
+    .phase { padding-bottom: 16px; gap: 12px; }
+    .phase-dot { width: 30px; height: 30px; font-size: 12px; }
+    .phase:not(:last-child)::before { left: 14px; top: 34px; }
+    .phase-title { font-size: 13px; }
+    .phase-meta  { font-size: 11px; }
+    .phase-desc  { font-size: 11px; }
+    .status { font-size: 9px; padding: 2px 7px; }
+
+    /* Pricing */
+    .pricing-item { padding: 10px 12px; flex-wrap: wrap; gap: 6px; }
+    .pricing-icon { font-size: 16px; width: 28px; }
+    .pricing-name { font-size: 13px; }
+    .pricing-sub  { font-size: 11px; }
+    .pricing-amount { font-size: 14px; }
+    .pricing-time { font-size: 11px; }
+    .pricing-total { flex-direction: column; gap: 8px; text-align: center; padding: 14px; }
+    .pricing-total strong { font-size: 22px; }
+
+    /* Roadmap bottom box */
+    div[style*="font-size:32px"][style*="gradient-text"] { font-size: 26px !important; }
+
+    /* Info bar on last slide → wrap */
+    .info-bar { flex-wrap: wrap !important; gap: 14px !important; padding: 14px !important; justify-content: center; }
+    .info-bar > div { min-width: 100px; }
+    .info-bar > div[style*="width:1px"] { display: none; }
+
+    /* Navigation */
+    .nav { padding: 7px 12px; gap: 8px; bottom: 14px; }
+    .nav-btn { width: 30px; height: 30px; font-size: 14px; }
+    .nav-counter { font-size: 11px; min-width: 36px; }
+    .nav-dot { width: 5px; height: 5px; }
+    .nav-dot.active { width: 14px; }
+  }
+
+  @media (max-width: 400px) {
+    .slide { padding: 14px 12px 80px; }
+    h1 { font-size: 24px !important; }
+    h2 { font-size: 18px !important; }
+    .grid-4 { grid-template-columns: 1fr 1fr !important; }
+    .hero-badges { flex-direction: column; align-items: center; }
+  }
 </style>
 </head>
 <body>
@@ -678,7 +810,7 @@
         <h2>Всё что нужно <span style="color:#60a5fa">для бизнеса</span><br>в одной платформе</h2>
         <div class="divider blue"></div>
       </div>
-      <table class="compare-table">
+      <div class="table-wrap"><table class="compare-table">
         <thead>
           <tr>
             <th style="width:38%">Функционал</th>
@@ -749,7 +881,7 @@
             <td style="color:var(--muted);font-size:13px">Полная i18n поддержка</td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
   </div>
 
@@ -879,7 +1011,7 @@
         <div class="divider" style="background:#fb923c"></div>
         <p>Заказчик выбирает удобный способ — мы реализуем любой или все три сразу</p>
       </div>
-      <div style="display:flex;gap:20px;margin-top:24px">
+      <div class="pay-grid" style="display:flex;gap:20px;margin-top:24px">
         <div class="pay-card" style="border-color:rgba(0,168,107,.3)">
           <div class="pay-icon green">🏦</div>
           <h3 style="color:var(--accent)">Безналичная оплата</h3>
@@ -1370,7 +1502,7 @@
           <div style="margin-top:12px;font-size:20px;font-weight:700;color:#c084fc">от 600 000 ₸</div>
         </div>
       </div>
-      <div style="margin-top:28px;padding:16px 32px;background:var(--card);border:1px solid var(--border);border-radius:14px;display:flex;gap:32px;align-items:center">
+      <div class="info-bar" style="margin-top:28px;padding:16px 32px;background:var(--card);border:1px solid var(--border);border-radius:14px;display:flex;gap:32px;align-items:center">
         <div style="text-align:center">
           <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Стек</div>
           <div style="font-size:14px;font-weight:600;margin-top:4px">Java + React + Flutter</div>
